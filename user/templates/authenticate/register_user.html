@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% if form.errors %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    erreur de formulaire
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+<h5 class="text-center fs-3 ">Inscrivez vous</h5>
+<form action="{% url 'register_user' %}" method="POST">
+    {%csrf_token%}
+    {{ form.as_p }}
+    <br><br>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+        <a class=" btn btn-secondary" href="{% url 'login' %}">Retour</a>
+        <input type="submit" value="S'inscrire" class="btn btn-secondary ">
+      </div>
+</form>
+{% endblock %}

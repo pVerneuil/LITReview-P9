@@ -1,20 +1,46 @@
-
 {% extends 'main/base.html' %}
 {% block content %}
-<h1>Connectez-vous</h1>
-<form action="" method="POST">
-  {%csrf_token%}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <br><br>
+      <br><br>
+      <h5 class="text-center fs-3 ">Inscrivez-vous maintenant</h5>
+      <br>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center">
 
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Nom d'utilisateur</label>
-      <input type="text" class="form-control" name="username" aria-describedby="emailHelp">
+        <a class=" btn btn-secondary" href="{% url 'register_user' %}">S'inscrire</a>
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-      <input type="password" class="form-control" name="password">
+    <div class="col">
+      <br><br>
+      <h5 class="text-center fs-3 ">Connectez-vous</h5>
+      <br>
+      <form action="" method="POST">
+        {%csrf_token%}
+
+        <div class="mb-3 ">
+          <label for="exampleInputEmail1" class="form-label"></label>
+          <input type="text" class="form-control" name="username" placeholder="Nom d'utilisateur"
+            aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label"></label>
+          <input type="password" class="form-control" name="password" placeholder="Mot de passe">
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+          <input type="submit" value="Se connecter" class="btn btn-secondary ">
+        </div>
+
+      </form>
     </div>
 
 
-  <input type="submit" value="Submit"class="btn btn-secondary">
-  </form>
-  {% endblock %}
+  </div>
+</div>
+
+
+
+{% endblock %}
