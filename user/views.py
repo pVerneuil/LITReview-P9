@@ -13,7 +13,7 @@ def login_user(request):
 			login(request, user)
 			return redirect('home')
 		else:
-			messages.success(request, ("Nom d'utilisateur ou mot de passe invalide. Veuiller réessayer"))	
+			messages.warning(request, ("Nom d'utilisateur ou mot de passe invalide. Veuiller réessayer"))	
 			return redirect('login')	
 
 
