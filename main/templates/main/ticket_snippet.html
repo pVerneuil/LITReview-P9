@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+{%for ticket in tickets %}
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{ticket.title}}</h5>
+    <p class="card-text">{{ticket.description}}</p>
+    <p class="card-text"><small class="text-muted">{{ticket.time_created}}</small></p>
+  </div>
+  <img src="{{ticket.image.url}}" class="card-img-bottom" alt="...">
+</div>
+{% endfor %}
+{% endblock %}

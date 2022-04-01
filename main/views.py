@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import TicketCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Ticket, Review
+from django.contrib.auth.models import User
 
 @login_required
 def home(request):
@@ -22,3 +24,11 @@ def create_ticket(request):
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'main/create_ticket.html',{'form' : form,'submitted': submitted})
+
+def display_ticket(request):
+    tickets = Ticket.objects.filter(user = request.user)  #!change later to followed users tickets	
+    # author = User.objects(pk=tickets.user)
+    return render(request, 'main/ticket_snippet.html', {
+			"tickets": tickets ,
+            # 'author' :author
+			})
