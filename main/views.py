@@ -7,12 +7,15 @@ from django.contrib.auth.models import User
 
 @login_required
 def home(request):
-    return render(request, 'main/home.html',{})
+    ticket = Ticket.objects.get(pk = 12) #! test with one ticket
+    return render(request, 'main/home.html',{
+        "ticket": ticket ,
+    })
 @login_required
 def create_ticket(request):
     submitted = False
     if request.method == 'POST':
-        form = TicketCreationForm(request.POST)
+        form = TicketCreationForm(request.POST, request.FILES)
         if form.is_valid():
             new_ticket =form.save(commit= False)
             new_ticket.user = request.user
@@ -25,10 +28,15 @@ def create_ticket(request):
             submitted = True
     return render(request, 'main/create_ticket.html',{'form' : form,'submitted': submitted})
 
-def display_ticket(request):
-    tickets = Ticket.objects.filter(user = request.user)  #!change later to followed users tickets	
-    # author = User.objects(pk=tickets.user)
+def display_ticket(request): #!do i need that?
+    # ticket = Ticket.objects.filter(user = request.user)  
     return render(request, 'main/ticket_snippet.html', {
-			"tickets": tickets ,
-            # 'author' :author
+			"ticket": ticket ,
 			})
+    
+@login_required
+def response_ticket(request,ticket_id):
+    ticket = Ticket.objects.get(pk = ticket_id) #! test with one ticket
+    return render(request, 'main/response_ticket.html',{
+        "ticket": ticket
+    })

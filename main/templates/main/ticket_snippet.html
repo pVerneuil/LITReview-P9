@@ -1,14 +1,25 @@
-{% extends 'main/base.html' %}
-{% block content %}
 
-{%for ticket in tickets %}
-<div class="card">
+{% block content %}
+<br>
+<div class="card " >
+  <div class="card-body">
+  <div class="d-grid gap-2 d-md-flex justify-content-between">
+    <p> <strong>{{ticket.user}}</strong>  a demandé une critique</p> <p>{{ticket.time_created}}</p>
+  </div>
+  {% if ticket.image %}
+  <img src="{{ticket.image.url}}" style="height: 300px"  alt="...">
+  {%endif%}
+</div>
   <div class="card-body">
     <h5 class="card-title">{{ticket.title}}</h5>
     <p class="card-text">{{ticket.description}}</p>
-    <p class="card-text"><small class="text-muted">{{ticket.time_created}}</small></p>
+    {%if True %} <!-- If ticket don't already have a response or not user is not responsding to the ticket-->
+    {% if 'response_ticket' not in request.get_full_path %} 
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <a href="{% url 'response_ticket' ticket.id %}" class="btn btn-secondary">Créer une critique</a>
+    </div>
+    {%endif %}
+    {%endif %}
   </div>
-  <img src="{{ticket.image.url}}" class="card-img-bottom" alt="...">
 </div>
-{% endfor %}
 {% endblock %}

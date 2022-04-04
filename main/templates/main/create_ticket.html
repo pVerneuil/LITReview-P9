@@ -12,7 +12,7 @@
     <h5 class="text-center fs-3 ">Créer un ticket</h5>
     <br><br>
 
-<form action="{% url 'create_ticket' %}" method="POST">
+<form action="{% url 'create_ticket' %}" method="POST" enctype="multipart/form-data">
     {%csrf_token%}
     {{ form.as_p }}
     <br><br>
