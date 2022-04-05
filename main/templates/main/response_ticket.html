@@ -2,8 +2,26 @@
 {% block content %}
 
 <div class="container">
-<div class="fs-5 text">Vous êtes en train de répondre à :</div>
+
+    {% if form.errors %}
+    <div class="container">
+
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Erreur de formulaire
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+    </div>  
+    <div class="fs-5 text">Vous êtes en train de répondre à :</div>
     {% include 'main/ticket_snippet.html' %}
-    
-</div>
-{%endblock%}
+    <form action="{% url 'create_ticket' %}" method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        {{ form.as_p }}
+        <br><br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+
+
+            <input type="submit" value="Envoyer" class="btn btn-secondary ">
+        </div>
+    </form>
+    {%endblock%}
