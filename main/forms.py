@@ -1,17 +1,16 @@
-
+from tkinter.ttk import Style
 from django import forms
 from django.forms import ModelForm
 from .models import Ticket, Review
+
 
 class TicketCreationForm(ModelForm):
     class Meta:
         model = Ticket
         fields = ('title', 'description', 'image')
-
         labels = {
             'title': 'Titre',
         }
-        
         widgets = {
             'title': forms.TextInput(attrs={'class':'form-control'}),
             'description':forms.Textarea(attrs={'class' :'form-control'}),
@@ -28,12 +27,11 @@ class ReviewResponseForm(ModelForm):
             'body' : 'Commentaire'
         }
         CHOICES = [
-            ('0', '- 0'), ('1', '- 1'), ('2', '- 2'),
-            ('3', '- 3'), ('4', '- 4'), ('5', '- 5')]
-        Widgets = {
+            ('0', ' 0'), ('1', ' 1'), ('2', ' 2'),
+            ('3', ' 3'), ('4', ' 4'), ('5', ' 5')]
+        widgets = {
                 'headline': forms.TextInput(attrs={'class':'form-control'}),
-                'body': forms.TextInput(attrs={'class':'form-control'}),
-                
-                'rating' : forms.RadioSelect(choices= CHOICES),
+                'body': forms.Textarea(attrs={'class':'form-control'}), 
+                'rating' : forms.RadioSelect(choices= CHOICES, attrs={}),
             
         }

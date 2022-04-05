@@ -28,7 +28,7 @@ class Review(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self) -> str:
-        return self.ticket
+        return self.headline
 
 class UserFollows(models.Model):
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')

@@ -46,7 +46,7 @@ def response_ticket(request,ticket_id):
             new_reveiw.ticket = ticket
             new_reveiw.save()
             messages.success(request,("Création de la critique réussi"))
-            return redirect('/response_ticket?submitted=True')
+            return redirect('/my_posts')
     else:
         form = ReviewResponseForm
         if 'submitted' in request.GET:
@@ -55,3 +55,12 @@ def response_ticket(request,ticket_id):
         "ticket": ticket,
         'form' : form,
         'submitted': submitted})
+
+
+@login_required
+def my_posts(request):
+    user = request.user
+    return render(request, 'main/my_posts.html',{
+        'user' : user
+        
+    })

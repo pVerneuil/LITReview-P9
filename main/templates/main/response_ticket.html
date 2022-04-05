@@ -11,17 +11,35 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endif %}
-    </div>  
+    </div>
     <div class="fs-5 text">Vous êtes en train de répondre à :</div>
     {% include 'main/ticket_snippet.html' %}
-    <form action="{% url 'create_ticket' %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'response_ticket' ticket.id %}" method="POST" enctype="multipart/form-data">
         {%csrf_token%}
-        {{ form.as_p }}
+        <br>
+        <div class="mb-3">
+            <label class="form-label">{{form.headline.label}}</label>
+            {{form.headline}}
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">{{form.rating.label}}</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            {% for check in form.rating %}
+            {{check}}
+            {% endfor %}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{form.body.label}}</label>
+            {{form.body}}
+        </div>
         <br><br>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-
-
             <input type="submit" value="Envoyer" class="btn btn-secondary ">
         </div>
     </form>
-    {%endblock%}
+</div>
+{%endblock%}
