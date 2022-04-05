@@ -39,7 +39,7 @@ def response_ticket(request,ticket_id):
     ticket = Ticket.objects.get(pk = ticket_id) #! test with one ticket
     submitted = False
     if request.method == 'POST':
-        form = ReviewResponseForm(request.POST, request.FILES)
+        form = ReviewResponseForm(request.POST)
         if form.is_valid():
             new_reveiw =form.save(commit= False)
             new_reveiw.user = request.user
