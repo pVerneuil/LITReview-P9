@@ -1,0 +1,47 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% if form.errors %}
+<div class="container">
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Erreur de formulaire
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    <form action="{% url 'create_review' %}" method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        <h6 class="fs-4 text">Livre / Article</h6>
+        <div class="container">
+            {{ticket_form.as_p }}
+        </div>
+        <br>
+        <h6 class="fs-4 text">Critique</h6>
+        <div class="container">
+            
+            <div class="mb-3">
+                <label class="form-label">{{review_form.headline.label}}</label>
+            {{review_form.headline}}
+        </div>
+        <div class="mb-3">
+            
+            <label for="exampleInputPassword1" class="form-label">{{review_form.rating.label}}</label>
+        </div>
+        <div class="form-check form-check-inline">
+            {% for check in review_form.rating %}
+            {{check}}
+            {% endfor %}
+        </div>
+        <br>
+        <br>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">{{review_form.body.label}}</label>
+            {{review_form.body}}
+        </div>
+    </div>
+
+        <br>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <input type="submit" value="Envoyer" class="btn btn-secondary ">
+        </div>
+    </form>
+    {% endblock %}

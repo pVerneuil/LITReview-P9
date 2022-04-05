@@ -5,12 +5,14 @@ from django.contrib.auth.decorators import login_required
 from .models import Ticket, Review
 from django.contrib.auth.models import User
 
+
 @login_required
 def home(request):
     ticket = Ticket.objects.get(pk = 12) #! test with one ticket
     return render(request, 'main/home.html',{
         "ticket": ticket ,
     })
+
 @login_required
 def create_ticket(request):
     submitted = False
@@ -54,6 +56,35 @@ def response_ticket(request,ticket_id):
     return render(request, 'main/response_ticket.html',{
         "ticket": ticket,
         'form' : form,
+        'submitted': submitted})
+
+@login_required
+def create_review(request):
+    submitted = False
+    if request.method == 'POST':
+        ticket_form = TicketCreationForm(request.POST)
+        review_form = ReviewResponseForm(request.POST, request.FILES)
+        
+        if ticket_form.is_valid() and review_form.is_valid():
+            new_ticket = ticket_form.save(commit= False)
+            new_ticket.user = request.user
+            
+            new_reveiw = review_form.save(commit= False)
+            new_reveiw.user = request.user
+            new_reveiw.ticket = new_ticket
+            
+            new_ticket.save()
+            new_reveiw.save()
+            messages.success(request,("Création de la critique réussi"))
+            return redirect('/create_review?submitted=True')
+    else:
+        ticket_form = TicketCreationForm
+        review_form = ReviewResponseForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'main/create_review.html',{
+        'ticket_form' : ticket_form,
+        'review_form' : review_form,
         'submitted': submitted})
 
 

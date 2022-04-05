@@ -1,4 +1,3 @@
-from tkinter.ttk import Style
 from django import forms
 from django.forms import ModelForm
 from .models import Ticket, Review
@@ -35,3 +34,4 @@ class ReviewResponseForm(ModelForm):
                 'rating' : forms.RadioSelect(choices= CHOICES, attrs={}),
             
         }
+
