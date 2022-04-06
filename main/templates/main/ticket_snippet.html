@@ -1,25 +1,36 @@
-
 {% block content %}
 <br>
-<div class="card " >
+<div class="card ">
   <div class="card-body">
-  <div class="d-grid gap-2 d-md-flex justify-content-between">
-    <p> <strong>{{ticket.user}}</strong>  a demandé une critique</p> <p>{{ticket.time_created}}</p>
-  </div>
-  {% if ticket.image %}
-  <img src="{{ticket.image.url}}" style="height: 300px"  alt="...">
-  {%endif%}
-</div>
-  <div class="card-body">
-    <h5 class="card-title">{{ticket.title}}</h5>
-    <p class="card-text">{{ticket.description}}</p>
-    {%if True %} <!-- If ticket don't already have a response or not user is not responsding to the ticket-->
-    {% if 'response_ticket' not in request.get_full_path %} 
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <a href="{% url 'response_ticket' ticket.id %}" class="btn btn-secondary">Créer une critique</a>
+    <div class="d-grid gap-2 d-md-flex justify-content-between">
+      {% if review.user == request.user %}
+      <p> <strong>Vous</strong> avez demandé une critique</p>
+      <p>{{ticket.time_created}}</p>
+      {%else%}
+      <p> <strong>{{ticket.user}}</strong> a demandé une critique</p>
+      <p>{{ticket.time_created}}</p>
+      {% endif%}
     </div>
-    {%endif %}
-    {%endif %}
+    <div class="d-grid gap-2 d-md-flex justify-content-between">
+      {% if ticket.image %}
+      <img src="{{ticket.image.url}}" style="height: 300px" alt="...">
+      {%endif%}
+      <div class="d-flex flex-column justify-content-between m-3">
+        <div>
+          <h5 class="card-title">{{ticket.title}}</h5>
+          <p class="card-text">{{ticket.description}}</p>
+        </div>
+        {%if display_review_button %}        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <a href="{% url 'response_ticket' ticket.id %}" class="btn btn-secondary">Créer une critique</a>
+        {%endif %}
+        {%if display_modify_button %}        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <a href="{% url '' ticket.id %}" class="btn btn-secondary">Modifier</a>
+        {%endif %}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -2,7 +2,6 @@ from django import forms
 from django.forms import ModelForm
 from .models import Ticket, Review
 
-
 class TicketCreationForm(ModelForm):
     class Meta:
         model = Ticket

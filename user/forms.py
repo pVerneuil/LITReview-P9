@@ -2,7 +2,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-
+from django.forms import ModelForm
+from .models import UserFollows
 
 class RegisterUserForm(UserCreationForm):
 	class Meta:
@@ -21,3 +22,14 @@ class RegisterUserForm(UserCreationForm):
 		self.fields['username'].label = ''
 		self.fields['password1'].label = ''
 		self.fields['password2'].label = ''
+class FollowForm(ModelForm):
+    class Meta:
+        model = UserFollows
+        fields = ['followed_user']
+        labels = {'followed_user' : ''}
+        widgets = {
+            'followed_user': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder' : "Nom d'utilisateur"
+                }),
+        }

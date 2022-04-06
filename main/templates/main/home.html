@@ -2,9 +2,11 @@
 {% block content %}
 <br><br>
 <br><br>
-<a class=" btn btn-secondary" href="{% url 'create_ticket' %}">Demander une critique</a>
-<a class=" btn btn-secondary" href="{% url 'create_review' %}">Créer une critique</a>
+<div class="d-grid gap-2 d-md-flex justify-content-around">
+    <a class=" btn btn-secondary" href="{% url 'create_ticket' %}">Demander une critique</a>
+    <a class=" btn btn-secondary" href="{% url 'create_review' %}">Créer une critique</a>
+</div>
 <br><br>
-<h1>Feed goes here</h1>
-{% include 'main/ticket_snippet.html' %}
+{% include 'main/review_snippet.html' %}
+<br>
 {% endblock %}

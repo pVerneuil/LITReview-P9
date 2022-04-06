@@ -1,0 +1,48 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% if form.errors %}
+<div class="container">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Erreur de formulaire
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    <br><br>
+    <div class="container">
+        <h5 class="text-center fs-4 ">Suivre d'autres utilisateurs</h5>
+        <form action="{% url 'follows' %}" method="POST">
+            {%csrf_token%}
+            <br>
+            <div class="d-flex align-items-end">
+                <div class="flex-fill">
+                    {{ form.as_p }}
+                </div>
+                <div class="ps-2 pb-3">
+                    <input type="submit" value="Envoyer" class="btn btn-secondary">
+                </div>
+            </div>
+        </form>
+    </div>
+    <br><br>
+    <h5 class="text-center fs-4 ">Abonnements</h5>
+    <br>
+    {%for follower in followed_by%}
+    <div class="d-flex align-items-end">
+        <div class="border border-secondary rounded mb-1 flex-fill">
+            <div class=" p-1">{{follower.followed_user }}</div>
+        </div>
+        <div class="ps-2 py-1">
+            <a href="{% url 'unfollow' follow_id=follower.id%}" class="btn btn-secondary">Se désabonner</a></li>
+        </div>
+    </div>
+    {%endfor%}
+    <br>
+    <h5 class="text-center fs-4 ">Abonnés</h5>
+    <br>
+    {%for sub in following%}
+    <div class="border border-secondary rounded mb-1">
+        <div class=" p-1">{{sub.user}}</div>
+    </div>
+    {%endfor%}
+</div>
+{% endblock %}
