@@ -26,6 +26,9 @@
     <br><br>
     <h5 class="text-center fs-4 ">Abonnements</h5>
     <br>
+    {%if followed_by|length == 0%}
+    <h5 class="text-center fs-6 ">Vous n'avez pas encore d'abonnement</h5>
+    {%else%}
     {%for follower in followed_by%}
     <div class="d-flex align-items-end">
         <div class="border border-secondary rounded mb-1 flex-fill">
@@ -36,13 +39,18 @@
         </div>
     </div>
     {%endfor%}
+    {%endif%}
     <br>
     <h5 class="text-center fs-4 ">Abonnés</h5>
     <br>
+    {%if following|length == 0%}
+    <h5 class="text-center fs-6 ">Vous n'avez pas encore d'abonné</h5>
+    {%else%}
     {%for sub in following%}
     <div class="border border-secondary rounded mb-1">
         <div class=" p-1">{{sub.user}}</div>
     </div>
     {%endfor%}
+    {%endif%}
 </div>
 {% endblock %}

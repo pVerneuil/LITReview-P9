@@ -9,17 +9,19 @@
     </div>
     {% endif %}
     <br><br>
-    <h5 class="text-center fs-3 ">Créer un ticket</h5>
+    <h5 class="text-center fs-3 ">Modifer votre Ticket</h5>
     <br><br>
 
-    <form action="{% url 'create_ticket' %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'update_ticket' ticket.id %}" method="POST" enctype="multipart/form-data">
         {%csrf_token%}
         {{ form.as_p }}
+        {% if ticket.image %}
+        <div class="fs-5"> Image actuelle :</div>
+        <img src="{{ticket.image.url}}" style="height: 300px" alt="...">
+        {%endif%}
         <br><br>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-
-
-            <input type="submit" value="Créer" class="btn btn-secondary ">
+        <div class="d-flex justify-content-md-end">
+            <input type="submit" value="Modifer" class="btn btn-secondary ">
         </div>
     </form>
 </div>

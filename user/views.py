@@ -53,12 +53,26 @@ def follows(request):
     submitted = False
     if request.method == "POST":
         form = FollowForm(request.POST)
-        print(form)
-        if form.is_valid():  #! does validate
-            new_follow = form.save(commit=False)
-            new_follow.user = request.user
-            new_follow.save()
-            messages.success(request, ("Abonnement réussi"))
+        if form.is_valid():
+            new_follow = form.cleaned_data["user_to_follow"]
+            if not User.objects.filter(username=new_follow):
+                messages.warning(request, ("Cet utilisateur n'existe pas"))
+            elif User.objects.get(username=new_follow) == request.user:
+                messages.warning(request, ("Vous ne pouvez pas vous suivre vous même"))
+            elif User.objects.get(username=new_follow) in [
+                user.followed_user
+                for user in UserFollows.objects.filter(user=request.user)
+            ]:
+                messages.warning(request, ("Vous êtes déja abonner à cet utilisateur"))
+            elif User.objects.get(username=new_follow):
+                new_db_entry = UserFollows(
+                    user=request.user,
+                    followed_user=User.objects.get(username=new_follow),
+                )
+                new_db_entry.save()
+                messages.success(request, ("Abonnement réussi"))
+            else:
+                messages.warning(request, ("Something went wrong"))
             return redirect("/follows?submitted=True")
 
     else:

@@ -2,7 +2,7 @@
 <br>
 <div class="card ">
     <div class="card-body">
-        <div class="d-grid gap-2 d-md-flex justify-content-between">
+        <div class="d-flex justify-content-between">
             {% if review.user == request.user %}
             <p> <strong>Vous</strong> avez publié une critique </p>
             <p>{{review.time_created}}</p>
@@ -11,35 +11,27 @@
             <p>{{review.time_created}}</p>
             {% endif%}
         </div>
-    </div>
-    <div class="card-body">
         <div class="d-flex flex-row mb-3">
             <h5 class="card-title">{{review.headline}} </h5>
             <div>
                 <p class="ms-3 fs-6 text">
-                {%for i in '12345' %}
-                {% if forloop.counter <= review.rating %}
-                ★
-                {%else%}
-                ☆
-                {%endif%}
-                {%endfor%}
-                </p>
+                    {%for i in '12345' %}
+                    {% if forloop.counter <= review.rating %} ★ {%else%} ☆ {%endif%} {%endfor%} </p>
             </div>
         </div>
         <p class="card-text">{{review.body}}</p>
 
-        {% if False %}
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a href="{% url 'response_ticket' ticket.id %}" class="btn btn-secondary">Modifier</a>
-        </div>
-        {%endif %}
     </div>
     <div class="container">
-        {% with ticket=review.ticket display_review_button=False %}
+        {% with ticket=review.ticket display_review_button=False display_modify_delete_buttons=False %}
         {% include 'main/ticket_snippet.html' %}
         {%endwith%}
     </div>
-    <br>
+    {% if display_modify_delete_buttons %}
+    <div class="d-flex justify-content-md-end">
+        <a href="{% url 'delete_content' 'review' review.id %}" class="btn btn-secondary m-3">Supprimer</a>
+        <a href="{% url 'update_review' review.id %}" class="btn btn-secondary m-3">Modifier</a>
+    </div>
+    {%endif %}
 </div>
 {% endblock %}

@@ -1,20 +1,19 @@
 {% extends 'main/base.html' %}
 {% block content %}
-
+{% if form.errors %}
 <div class="container">
 
-    {% if form.errors %}
-    <div class="container">
-
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            Erreur de formulaire
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endif %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Erreur de formulaire
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    {% endif %}
+    <br><br>
+    <h5 class="text-center fs-3 ">Modifer votre Critique</h5>
+    <br><br>
     <div class="fs-5 text">Vous êtes en train de répondre à :</div>
     {% include 'main/ticket_snippet.html' %}
-    <form action="{% url 'response_ticket' ticket.id %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'update_review' review.id %}" method="POST" enctype="multipart/form-data">
         {%csrf_token%}
         <br>
         <div class="mb-3">
@@ -37,10 +36,9 @@
             {{form.body}}
         </div>
         <br><br>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <input type="submit" value="Envoyer" class="btn btn-secondary ">
+        <div class="d-flex justify-content-md-end">
+            <input type="submit" value="Modifer" class="btn btn-secondary ">
         </div>
     </form>
-    <br><br>
 </div>
-{%endblock%}
+{% endblock %}

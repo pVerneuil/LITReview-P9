@@ -29,13 +29,14 @@ class RegisterUserForm(UserCreationForm):
         self.fields["password2"].label = ""
 
 
-class FollowForm(ModelForm):
-    class Meta:
-        model = UserFollows
-        fields = ["followed_user"]
-        labels = {"followed_user": ""}
-        widgets = {
-            "followed_user": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Nom d'utilisateur"}
-            ),
-        }
+class FollowForm(forms.Form):
+    user_to_follow = forms.CharField(
+        max_length=150,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Nom d'utilisateur",
+            },
+        ),
+    )
