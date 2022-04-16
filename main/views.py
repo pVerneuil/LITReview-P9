@@ -11,6 +11,14 @@ from django.shortcuts import render
 
 
 def get_user_viewable_content(current_user):
+    """get the posts of the currents user and the post of users followed by the current user
+
+    Args:
+        current_user (object): user object
+
+    Returns:
+        querryset: returns 2 querryset viewable_reviews and viewavle_ticket, in that order
+    """
     users_followed_by_current_user = [
         user.followed_user for user in UserFollows.objects.filter(user=current_user)
     ]
@@ -21,7 +29,15 @@ def get_user_viewable_content(current_user):
 
 
 @login_required
-def home(request):
+def feed(request):
+    """generate the feed for the home page
+
+    Args:
+        request (request): 
+
+    Returns:
+        render: context:{posts, display_review_button:True}
+    """
     reviews, tickets = get_user_viewable_content(request.user)
     reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
     tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
@@ -40,6 +56,14 @@ def home(request):
 
 @login_required
 def see_my_posts(request):
+    """generate the my post view
+
+    Args:
+        request (request): _description_
+
+    Returns:
+        render: context = {my_posts, display_modify_delete_buttons}
+    """
     my_tickets = Ticket.objects.filter(user=request.user)
     my_tickets = my_tickets.annotate(content_type=Value("TICKET", CharField()))
 
@@ -61,6 +85,15 @@ def see_my_posts(request):
 
 @login_required
 def create_ticket(request):
+    """allow the user to submit the display form to create a ticket, save the ticket if the form is valid
+
+    Args:
+        request ()
+
+    Returns:
+        if GET: render: context:{ form, submitted}
+        if POST: redirect to create_ticket
+    """
     submitted = False
     if request.method == "POST":
         form = TicketCreationForm(request.POST, request.FILES)
@@ -81,6 +114,16 @@ def create_ticket(request):
 
 @login_required
 def response_ticket(request, ticket_id):
+    """allow the user to respond to a ticket, and save the rview to the db
+
+    Args:
+        request (request): 
+        ticket_id (ticket.object.id): id of the ticket which the user want to respond to
+
+    Returns:
+        if GET render: context : {ticket, form, submited}
+        if POST redirect to my_post
+    """
     ticket = Ticket.objects.get(pk=ticket_id)
     submitted = False
     if request.method == "POST":
@@ -105,6 +148,15 @@ def response_ticket(request, ticket_id):
 
 @login_required
 def create_review(request):
+    """create a review from scratch , the ticket and review forms are conbine as one, save the ticket and the review to the db
+
+    Args:
+        request (request): 
+
+    Returns:
+        if GET :render: context:{ticket_form, review_form, submited}
+        if POST : redirect to create_review
+    """
     submitted = False
     if request.method == "POST":
         ticket_form = TicketCreationForm(request.POST)
@@ -140,6 +192,16 @@ def create_review(request):
 
 @login_required
 def delete_content(request, content_id, content_type):
+    """allow the user to delete a ticket or a review from the DB
+
+    Args:
+        request (request): 
+        content_id (object id ): id of the ticket or review to delete
+        content_type (str): either 'ticket' or 'review'
+
+    Returns:
+        redirect: to my_posts page  
+    """
     if content_type == "ticket":
         post = Ticket.objects.get(pk=content_id)
     elif content_type == "review":
@@ -151,6 +213,16 @@ def delete_content(request, content_id, content_type):
 
 @login_required
 def update_ticket(request, ticket_id):
+    """allow the user to change the data of a ticket
+
+    Args:
+        request (request): 
+        ticket_id (ticket.id): ticket to update id
+
+    Returns:
+        if GET :render: context{ ticket, form}
+        if POST : redirect to my_post
+    """
     ticket = Ticket.objects.get(pk=ticket_id)
     form = TicketCreationForm(
         request.POST or None, request.FILES or None, instance=ticket
@@ -171,6 +243,16 @@ def update_ticket(request, ticket_id):
 
 @login_required
 def update_review(request, review_id):
+    """allow the user to change the data of a review
+
+    Args:
+        request (request): 
+        review_id (reveiw.id): review to update id
+
+    Returns:
+        if GET :render: context{ review, ticket, form}
+        if POST : redirect to my_post
+    """
     review = Review.objects.get(pk=review_id)
     form = ReviewResponseForm(request.POST or None, instance=review)
     if form.is_valid():

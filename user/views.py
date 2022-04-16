@@ -8,6 +8,14 @@ from .models import UserFollows
 
 
 def login_user(request):
+    """log the user in if the credential are correct
+
+    Args:
+        request (request): 
+
+    Returns:
+        : _description_
+    """
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
