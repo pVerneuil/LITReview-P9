@@ -186,6 +186,3 @@ def update_review(request, review_id):
             "form": form,
         },
     )
-
-    # get user viewalbe
-    # user_i_follow= UserFollows.objects.filter(user =request.user)

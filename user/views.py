@@ -21,7 +21,6 @@ def login_user(request):
                 ("Nom d'utilisateur ou mot de passe invalide. Veuiller réessayer"),
             )
             return redirect("login")
-
     else:
         return render(request, "authenticate/login.html")
 
@@ -55,24 +54,28 @@ def follows(request):
         form = FollowForm(request.POST)
         if form.is_valid():
             new_follow = form.cleaned_data["user_to_follow"]
-            if not User.objects.filter(username=new_follow):
-                messages.warning(request, ("Cet utilisateur n'existe pas"))
-            elif User.objects.get(username=new_follow) == request.user:
-                messages.warning(request, ("Vous ne pouvez pas vous suivre vous même"))
-            elif User.objects.get(username=new_follow) in [
-                user.followed_user
-                for user in UserFollows.objects.filter(user=request.user)
-            ]:
-                messages.warning(request, ("Vous êtes déja abonner à cet utilisateur"))
-            elif User.objects.get(username=new_follow):
-                new_db_entry = UserFollows(
-                    user=request.user,
-                    followed_user=User.objects.get(username=new_follow),
-                )
-                new_db_entry.save()
-                messages.success(request, ("Abonnement réussi"))
-            else:
-                messages.warning(request, ("Something went wrong"))
+            try: 
+                try: 
+                    new_follow_in_db = User.objects.get(username=new_follow)
+                except:
+                    messages.warning(request, ("Cet utilisateur n'éxiste pas"))
+                else :
+                    if new_follow_in_db == request.user:
+                        messages.warning(request, ("Vous ne pouvez pas vous suivre vous même"))
+                    elif new_follow_in_db in [
+                        user.followed_user
+                        for user in UserFollows.objects.filter(user=request.user)
+                    ]:
+                        messages.warning(request, ("Vous êtes déja abonner à cet utilisateur"))
+                    elif new_follow_in_db:
+                        new_db_entry = UserFollows(
+                            user=request.user,
+                            followed_user=User.objects.get(username=new_follow),
+                        )
+                        new_db_entry.save()
+                        messages.success(request, ("Abonnement réussi"))
+            except:
+                    messages.warning(request, ("Something went wrong"))
             return redirect("/follows?submitted=True")
 
     else:
