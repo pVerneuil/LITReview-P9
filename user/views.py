@@ -8,14 +8,7 @@ from .models import UserFollows
 
 
 def login_user(request):
-    """log the user in if the credential are correct
 
-    Args:
-        request (request): 
-
-    Returns:
-        : _description_
-    """
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -57,6 +50,15 @@ def register_user(request):
 
 @login_required
 def follows(request):
+    """allow the current user to follow other users, and display users followed by the current user and the users that folow the currnet user 
+
+    Args:
+        request (): 
+
+    Returns:
+        if POST redirect to the follow page 
+        if GET render with context {form, submited, followers,following}
+    """
     submitted = False
     if request.method == "POST":
         form = FollowForm(request.POST)
