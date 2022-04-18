@@ -32,6 +32,8 @@
         <a href="{% url 'delete_content' 'review' review.id %}" class="btn btn-secondary m-3">Supprimer</a>
         <a href="{% url 'update_review' review.id %}" class="btn btn-secondary m-3">Modifier</a>
     </div>
+    {%else%}
+    <br>
     {%endif %}
 </div>
 {% endblock %}

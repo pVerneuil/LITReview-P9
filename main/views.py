@@ -4,10 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Ticket, Review
 from user.models import UserFollows
-from django.contrib.auth.models import User
 from itertools import chain
 from django.db.models import CharField, Value
-from django.shortcuts import render
 
 
 def get_user_viewable_content(current_user):
@@ -33,14 +31,17 @@ def feed(request):
     """generate the feed for the home page
 
     Args:
-        request (request): 
+        request (request):
 
     Returns:
-        render: context:{posts, display_review_button:True}
+        render: context:{posts}
     """
     reviews, tickets = get_user_viewable_content(request.user)
     reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
     tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+    # for ticket in tickets:
+    #     if ticket.review_set.all():
+    #         ticket.annotate()
     posts = sorted(
         chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
     )
@@ -49,7 +50,6 @@ def feed(request):
         "main/home.html",
         {
             "posts": posts,
-            "display_review_button": True,
         },
     )
 
@@ -117,7 +117,7 @@ def response_ticket(request, ticket_id):
     """allow the user to respond to a ticket, and save the rview to the db
 
     Args:
-        request (request): 
+        request (request):
         ticket_id (ticket.object.id): id of the ticket which the user want to respond to
 
     Returns:
@@ -148,10 +148,11 @@ def response_ticket(request, ticket_id):
 
 @login_required
 def create_review(request):
-    """create a review from scratch , the ticket and review forms are conbine as one, save the ticket and the review to the db
+    """create a review from scratch , the ticket and review forms are conbine as one,
+    save the ticket and the review to the db
 
     Args:
-        request (request): 
+        request (request):
 
     Returns:
         if GET :render: context:{ticket_form, review_form, submited}
@@ -195,12 +196,12 @@ def delete_content(request, content_id, content_type):
     """allow the user to delete a ticket or a review from the DB
 
     Args:
-        request (request): 
+        request (request):
         content_id (object id ): id of the ticket or review to delete
         content_type (str): either 'ticket' or 'review'
 
     Returns:
-        redirect: to my_posts page  
+        redirect: to my_posts page
     """
     if content_type == "ticket":
         post = Ticket.objects.get(pk=content_id)
@@ -216,7 +217,7 @@ def update_ticket(request, ticket_id):
     """allow the user to change the data of a ticket
 
     Args:
-        request (request): 
+        request (request):
         ticket_id (ticket.id): ticket to update id
 
     Returns:
@@ -246,7 +247,7 @@ def update_review(request, review_id):
     """allow the user to change the data of a review
 
     Args:
-        request (request): 
+        request (request):
         review_id (reveiw.id): review to update id
 
     Returns:

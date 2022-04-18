@@ -2,21 +2,30 @@
 {% block content %}
 <br><br>
 <br><br>
-<div class="d-grid gap-2 d-md-flex justify-content-around">
-    <a class=" btn btn-secondary" href="{% url 'create_ticket' %}">Demander une critique</a>
-    <a class=" btn btn-secondary" href="{% url 'create_review' %}">Créer une critique</a>
+<div class="d-grid gap-2 d-md-flex justify-content-between align-items-baseline">
+    <div>
+    <h1 class="display-4 font-weight-bold">Votre flux</h1>
 </div>
-<br><br>
+<div>
+    <a class=" btn btn-secondary mb-4" href="{% url 'create_ticket' %}">Demander une critique</a>
+    <a class=" btn btn-secondary mb-4 ms-2" href="{% url 'create_review' %}">Créer une critique</a>
+</div>
+</div>
 {%if posts|length == 0%}
-<br><br>
-<h5 class="text-center fs-5 ">Vous n'avez pas encore de post</h5>
-{%else%}
-{% for post in posts %}
-{% if post.content_type == 'TICKET' %}
-{% include 'main/ticket_snippet.html' with ticket=post %}
-{% elif post.content_type == 'REVIEW' %}
-{% include 'main/review_snippet.html' with review=post %}
-{%endif%}
-{% endfor %}
+    <br><br>
+    <h5 class="text-center fs-5 ">Vous n'avez pas encore de post</h5>
+    {%else%}
+    {% for post in posts %}
+        {% if post.content_type == 'TICKET' %}
+            {% if post.review_set.all %}
+                {% include 'main/ticket_snippet.html' with ticket=post display_review_button=False %}
+            {%else%}
+                {% include 'main/ticket_snippet.html' with ticket=post display_review_button=True %}
+            {% endif%}
+            {% elif post.content_type == 'REVIEW' %}
+                {% include 'main/review_snippet.html' with review=post %}
+        {%endif%}
+    {% endfor %}
+
 {%endif%}
 {% endblock %}

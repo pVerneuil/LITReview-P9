@@ -50,13 +50,14 @@ def register_user(request):
 
 @login_required
 def follows(request):
-    """allow the current user to follow other users, and display users followed by the current user and the users that folow the currnet user 
+    """allow the current user to follow other users,
+    and display users followed by the current user and the users that follow the current user
 
     Args:
-        request (): 
+        request ():
 
     Returns:
-        if POST redirect to the follow page 
+        if POST redirect to the follow page
         if GET render with context {form, submited, followers,following}
     """
     submitted = False
@@ -64,19 +65,23 @@ def follows(request):
         form = FollowForm(request.POST)
         if form.is_valid():
             new_follow = form.cleaned_data["user_to_follow"]
-            try: 
-                try: 
+            try:
+                try:
                     new_follow_in_db = User.objects.get(username=new_follow)
-                except:
+                except User.DoesNotExist:
                     messages.warning(request, ("Cet utilisateur n'éxiste pas"))
-                else :
+                else:
                     if new_follow_in_db == request.user:
-                        messages.warning(request, ("Vous ne pouvez pas vous suivre vous même"))
+                        messages.warning(
+                            request, ("Vous ne pouvez pas vous suivre vous même")
+                        )
                     elif new_follow_in_db in [
                         user.followed_user
                         for user in UserFollows.objects.filter(user=request.user)
                     ]:
-                        messages.warning(request, ("Vous êtes déja abonner à cet utilisateur"))
+                        messages.warning(
+                            request, ("Vous êtes déja abonner à cet utilisateur")
+                        )
                     elif new_follow_in_db:
                         new_db_entry = UserFollows(
                             user=request.user,
@@ -85,7 +90,7 @@ def follows(request):
                         new_db_entry.save()
                         messages.success(request, ("Abonnement réussi"))
             except:
-                    messages.warning(request, ("Something went wrong"))
+                messages.warning(request, ("Something went wrong"))
             return redirect("/follows?submitted=True")
 
     else:

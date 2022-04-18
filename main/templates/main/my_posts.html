@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% block content %}
 {%if my_posts|length == 0%}
-<br><br>
+<br><br> 
 <h5 class="text-center fs-5 ">Vous n'avez pas encore de post</h5>
 {%else%}
 {% for post in my_posts %}
